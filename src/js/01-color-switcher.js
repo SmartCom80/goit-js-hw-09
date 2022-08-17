@@ -8,12 +8,16 @@
 1.	onListenerBtn - прослуховує події на кнопках, та викликає або завершує виконання функції onColorSwitcher.
 2. onColorSwitcher - реалізує зміну кольору тега body, та блокування кнопки Start.
 3. getRandomHexColor - генерує кольор з допомогою методу Math.random
+4. onTimer - встановлює інтервал спрацювання setInterval функціі onColorSwitcher.
+5. onDefaultState - вимикає setInterval та скидає на налаштування по замовчуванню стиль body і активність кнопки Stop.
+
 */
 
 // Додаємо змінні-посилання на об'єкти DOM
 const startBtn = document.querySelector('[data-start]');
 const stopBtn = document.querySelector('[data-stop]');
 const body = document.querySelector('body');
+let timerId = null;
 
 // кнопка Stop за замовчуванням неактивна
 stopBtn.disabled = true;
@@ -26,17 +30,19 @@ function onListenerBTn() {
   startBtn.addEventListener('click', () => {
     startBtn.disabled = true;
     stopBtn.disabled = false;
-    timerId = setInterval(() => {
-      onColorSwitcher();
-    }, 1000);
+    onTimer();
   });
 
   stopBtn.addEventListener('click', () => {
     startBtn.disabled = false;
-    stopBtn.disabled = true;
-    clearInterval(timerId);
-    body.style.backgroundColor = null;
+    onDefaultState();
   });
+}
+
+function onTimer() {
+  return (timerId = setInterval(() => {
+    onColorSwitcher();
+  }, 1000));
 }
 
 function onColorSwitcher() {
@@ -45,4 +51,10 @@ function onColorSwitcher() {
 
 function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+}
+
+function onDefaultState() {
+  stopBtn.disabled = true;
+  clearInterval(timerId);
+  body.style.backgroundColor = null;
 }
