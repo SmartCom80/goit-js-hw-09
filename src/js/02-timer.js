@@ -8,6 +8,7 @@
 
 Відлік часу, відбувається з інтервалом в 1 секунду, та відображається на сторінці сайту.
 
+Функції.
 
 1. convertMs() - виконує відлік часу від вибраного значення в календарі та повертає результат у зовнішній код.
 
@@ -15,10 +16,9 @@
 
 3. notifyPopUp() - виводить на екран інформаційні повідомлення та розблоковує кнопку Start таймеру.
 
-4. onTimer - реалізовує таймер зі зворотнім відліком
+4. onTimer() - реалізовує таймер зі зворотнім відліком
 
-5. onShowTimer - реалізовує вивід значень комірок таймера
-
+5. onShowTimer() - реалізовує вивід значень комірок таймера
 */
 
 import flatpickr from 'flatpickr';
@@ -59,10 +59,10 @@ let calendar = flatpickr('#datetime-picker', options);
 // Функція виводить значення комірок таймера
 function onShowTimer(timerArray) {
   const { days, hours, minutes, seconds } = timerArray;
-  refs.day.textContent = days;
-  refs.hour.textContent = hours;
-  refs.minute.textContent = minutes;
-  refs.second.textContent = seconds;
+  refs.day.textContent = addLeadingZero(days);
+  refs.hour.textContent = addLeadingZero(hours);
+  refs.minute.textContent = addLeadingZero(minutes);
+  refs.second.textContent = addLeadingZero(seconds);
 }
 
 //	Функція реалізовує таймер зі зворотним відліком до вказаної дати
@@ -92,24 +92,23 @@ function convertMs(ms) {
   const dayMs = hourMs * 24;
 
   // Remaining days
-  const days = addLeadingZero(Math.floor(ms / dayMs));
+  const days = Math.floor(ms / dayMs);
   // Remaining hours
-  const hours = addLeadingZero(Math.floor((ms % dayMs) / hourMs));
+  const hours = Math.floor((ms % dayMs) / hourMs);
   // Remaining minutes
-  const minutes = addLeadingZero(
-    Math.floor(((ms % dayMs) % hourMs) / minuteMs)
-  );
+  const minutes = Math.floor(((ms % dayMs) % hourMs) / minuteMs);
   // Remaining seconds
-  const seconds = addLeadingZero(
-    Math.floor((((ms % dayMs) % hourMs) % minuteMs) / secondMs)
-  );
+  const seconds = Math.floor((((ms % dayMs) % hourMs) % minuteMs) / secondMs);
 
   return { days, hours, minutes, seconds };
 }
 
 // Функція додавання нуля до значень елементів таймеру
 function addLeadingZero(value) {
-  return value.toString().padStart(2, 0);
+  if (value.toString().length < 2) {
+    return value.toString().padStart(2, 0);
+  }
+  return value;
 }
 
 // Функція виклику інформаційних повідомлень.

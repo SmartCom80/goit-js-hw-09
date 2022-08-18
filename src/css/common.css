@@ -25,11 +25,13 @@ img {
   display: inline-block;
   margin-top: 15px;
   text-align: center;
-  font-size: 24px;
+  font-size: 22px;
+  font-weight: 500;
 }
 .value {
   display: inherit;
   margin: 0 auto;
+  font-size: 36px;
 }
 
 input,
